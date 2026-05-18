@@ -53,47 +53,73 @@ function ViewCard() {
 
             },[checkIn,checkOut,cardDetails.rent,total])
 
-    
+            const handleUpdateListing = async () => {
 
-   
-    const handleUpdateListing =async () => {
-         setUpdating(true)
-        try {
-
-            let formData = new FormData()
-     formData.append("title",title)
-     if(backEndImage1){formData.append("image1",backEndImage1)}
-     if(backEndImage2){formData.append("image2",backEndImage2)}
-     if(backEndImage3){formData.append("image3",backEndImage3)}
-     formData.append("description",description)
-     formData.append("rent",rent)
-     formData.append("city",city)
-     formData.append("landMark",landmark)
-    
-        
-        let result = await axios.post( serverUrl + `/api/listing/update/${cardDetails._id}` ,formData, {withCredentials:true}  )
-        setUpdating(false)
-        console.log(result)
-        toast.success("Lising Updated")
-        navigate("/")
-        setTitle("")
-        setDescription("")
-      
-       setBackEndImage1(null)
-       setBackEndImage2(null)
-       setBackEndImage3(null)
-       setRent("")
-       setCity("")
-       setLandmark("")
-       
-            
-        } catch (error) {
-            setUpdating(false)
-            console.log(error)
-            toast.error(error.response.data.message)
-        }
-        
-     }
+                try {
+             
+                   setUpdating(true);
+             
+                   const formData = new FormData();
+             
+                   formData.append("title", title);
+             
+                   if (backEndImage1) {
+                      formData.append("image1", backEndImage1);
+                   }
+             
+                   if (backEndImage2) {
+                      formData.append("image2", backEndImage2);
+                   }
+             
+                   if (backEndImage3) {
+                      formData.append("image3", backEndImage3);
+                   }
+             
+                   formData.append("description", description);
+                   formData.append("rent", rent);
+                   formData.append("city", city);
+                   formData.append("landMark", landmark);
+             
+                   const result = await axios.post(
+                      `${serverUrl}/api/listing/update/${cardDetails._id}`,
+                      formData,
+                      {
+                         withCredentials: true
+                      }
+                   );
+             
+                   console.log(result);
+             
+                   toast.success("Listing Updated Successfully");
+             
+                   navigate("/");
+             
+                   setTitle("");
+                   setDescription("");
+             
+                   setBackEndImage1(null);
+                   setBackEndImage2(null);
+                   setBackEndImage3(null);
+             
+                   setRent("");
+                   setCity("");
+                   setLandmark("");
+             
+                } catch (error) {
+             
+                   console.log(error);
+             
+                   toast.error(
+                      error.response?.data?.message ||
+                      error.message ||
+                      "Failed To Update Listing"
+                   );
+             
+                } finally {
+             
+                   setUpdating(false);
+                }
+             };
      const handleDeleteListing = async () => {
         setDeleting(true)
         try {
